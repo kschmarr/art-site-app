@@ -16,8 +16,9 @@ export default class Bio extends Component {
         </p>
         <p>
           Purchase requests can be sent to{" "}
-          <a href="mailto:name@email.com">the artist's agent</a>. You will be
-          contacted shortly for payment and shipping details.
+          <a href="mailto:name@email.com">the artist's agent</a>. Please include
+          the title of the piece you are interested in. You will be contacted
+          shortly for payment and shipping details.
         </p>
       </>
     );
