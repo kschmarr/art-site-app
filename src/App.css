@@ -61,7 +61,7 @@ label {
 select {
   margin: 3%;
   background-color: white;
-  font-size: 2rem;
+  font-size: 1.5rem;
 }
 li > a {
   font-size: 1.4rem;
@@ -110,8 +110,11 @@ nav {
   border-top: solid 1px black;
   padding: 2% 0;
 }
-/* .mobile-hidden {
+.mobile-hidden {
   display: none;
+}
+/* .art-div {
+  float: right;
 } */
 .art-image {
   max-height: 50vh;
@@ -133,11 +136,40 @@ nav {
 }
 .edit-art-form > input {
   text-align: left;
+  font-size: 1.5rem;
   width: 80%;
   margin-left: 5%;
   margin-right: 20%;
   display: block;
 }
+.dimLabel {
+  margin-left: 5%;
+  display: block;
+}
+.edit-art-form > input.dimInput {
+  width: fit-content;
+  display: inline;
+  margin-right: 0;
+}
+.priceLabel {
+  display: block;
+  margin-top: 2%;
+}
+.priceSpan {
+  margin-left: 5%;
+  display: inline;
+}
+.edit-art-form > input.priceInput {
+  display: inline;
+  margin-left: 0;
+  width: fit-content;
+}
+.matchFont {
+  font-size: 1.2rem;
+  margin: 0;
+  text-decoration: underline;
+}
+
 button.cancel-btn {
   max-width: 100px;
   margin: 0 auto;
@@ -169,7 +201,7 @@ h1.title {
   width: 80vw;
   border: solid 1px black;
   border-radius: 5%;
-  margin: 10vh auto;
+  margin: 0 auto;
   box-shadow: 0 7px 4px #777, 0 0 10px rgba(0, 0, 0, 0.5);
   padding: 30px 0 20px;
   background-color: #f5f5f5;
