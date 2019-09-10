@@ -1,7 +1,7 @@
 {
   "version": 2,
-  "alias": "happyliltreesdesigns",
-  "name": "art-site-app",
+  "alias": "dinner-the-app",
+  "name": "dinner-the-app",
   "routes": [
     {
       "src": "^/static/(.*)",
