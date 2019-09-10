@@ -8,10 +8,10 @@ export default class Splash extends Component {
         <section>
           <h2>What's the purpose of this wonderful app?</h2>
           <blockquote>
-            The frontend provides a platform for users to view pieces of artwork
-            and submit purchase requests for the art. The backend allows the
-            artist to interface with the database (add, edit, and remove pieces
-            of art from the site).
+            The public site provides a platform for users to view pieces of
+            artwork and submit purchase requests for the art. The auth site
+            allows the artist to interface with the database (add, edit, and
+            remove pieces of art from the site).
           </blockquote>
         </section>
         <section>
@@ -38,8 +38,11 @@ export default class Splash extends Component {
           <p>
             Username: Kris Password: lucky
             <br />
-            Please be respectful in how you utilize this public user. Thanks
-            -Management.
+            Please be respectful in how you utilize this public user.
+            <br />
+            Thanks,
+            <br />
+            &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;-Management
           </p>
         </section>
         <Link to="/main">

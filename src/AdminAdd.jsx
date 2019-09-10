@@ -6,16 +6,15 @@ import ValidationError from "./ValidationError";
 import config from "./config";
 import { Link } from "react-router-dom";
 
-export default class AdminEdit extends Component {
+export default class AdminAdd extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      artid: "",
       title: "",
       description: "",
       height: "",
       width: "",
-      availability: "",
+      availability: "available",
       price: "",
       image: "",
       nameValid: true,
@@ -53,24 +52,24 @@ export default class AdminEdit extends Component {
   handleSubmitArt = e => {
     e.preventDefault();
     let title = this.state.title.trim();
-    let image = this.state.image.trim();
     let description = this.state.description.trim();
     let height = this.state.height.trim();
     let width = this.state.width.trim();
     let availability = this.state.availability;
     let price = this.state.price.trim();
+    let image = this.state.image.trim();
     const newArt = {
       title: title,
-      image: image,
       description: description,
       height: height,
       width: width,
       availability: availability,
-      price: price
+      price: price,
+      image: image
     };
-    let { artid } = this.state;
-    fetch(`${config.API_ENDPOINT}/art/${artid}`, {
-      method: "PATCH",
+
+    fetch(`${config.API_ENDPOINT}/art`, {
+      method: "POST",
       headers: {
         "content-type": "application/json"
       },
@@ -81,31 +80,7 @@ export default class AdminEdit extends Component {
         return res.json();
       })
       .then(data => {
-        this.context.editArt(data);
-      })
-      .then(data => {
-        this.props.history.push("/admin/art");
-        return data;
-      })
-
-      .catch(error => {
-        console.error({ error });
-      });
-  };
-
-  handleDeleteArt = artid => {
-    fetch(`${config.API_ENDPOINT}/art/${artid}`, {
-      method: "DELETE",
-      headers: {
-        "content-type": "application/json"
-      }
-    })
-      .then(res => {
-        if (!res.ok) return res.json().then(e => Promise.reject(e));
-        return res.json();
-      })
-      .then(data => {
-        this.context.deleteArt(artid);
+        this.context.addArt(data);
       })
       .then(data => {
         this.props.history.push("/admin/art");
@@ -139,32 +114,8 @@ export default class AdminEdit extends Component {
     this.setState({ price: event.target.value });
   };
 
-  componentDidMount() {
-    let {
-      artid,
-      image,
-      description,
-      height,
-      width,
-      availability,
-      title,
-      price
-    } = this.props.location.state.art;
-    this.setState({
-      artid,
-      image,
-      description,
-      height,
-      width,
-      availability,
-      title,
-      price
-    });
-  }
-
   render() {
     let {
-      artid,
       image,
       description,
       height,
@@ -277,26 +228,16 @@ export default class AdminEdit extends Component {
             className="submitBtn"
             disabled={!this.state.nameValid}
           >
-            Submit Changes
+            Submit
           </button>
         </form>
 
-        <button
-          type="delete"
-          id="bigDeleteBtn"
-          className=""
-          onClick={() => {
-            this.handleDeleteArt(artid);
-          }}
-        >
-          Delete
-        </button>
         <Link
           to={{
             pathname: "/admin/art"
           }}
         >
-          <button type="button" className="cancel-btn">
+          <button type="button" className="cancel-btn-add">
             Cancel
           </button>
         </Link>

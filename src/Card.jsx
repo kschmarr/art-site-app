@@ -1,20 +1,18 @@
 import React, { Component } from "react";
 
 export default class Card extends Component {
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      currentDiv: this.props.id
-    };
-  }
   componentDidMount() {
+    let divID = "div" + this.props.id;
+
     let showhide = () => {
-      let divID = "div" + this.props.id;
-      let divToToggle = document.getElementById(divID);
-      divToToggle.classList.toggle("mobile-hidden");
+      document.getElementById(divID).classList.toggle("mobile-hidden");
     };
     document.getElementById(this.props.id).addEventListener("click", showhide);
+    if (this.props.id % 2 === 0) {
+      document.getElementById(divID).classList.add("art-div-right");
+    } else {
+      document.getElementById(divID).classList.toggle("art-div-left");
+    }
   }
 
   render() {
@@ -30,6 +28,7 @@ export default class Card extends Component {
 
     return (
       <section id={this.props.id} className="card">
+        <p>{title}</p>
         <img src={image} alt={title} className="art-image" />
         <div id={"div" + this.props.id} className="mobile-hidden art-div">
           <h3>{title}</h3>

@@ -1,11 +1,47 @@
 import React, { Component } from "react";
-// import ApiContext from "./ApiContext";
+import ApiContext from "./ApiContext";
 import Title from "./Title";
 import AdminNav from "./AdminNav";
-// import ValidationError from "./ValidationError";
-// import config from "./config";
+import config from "./config";
 
 export default class AdminBio extends Component {
+  static contextType = ApiContext;
+
+  handleChangeBio = value => {
+    this.context.editBio(value);
+  };
+
+  handleSubmitBio = e => {
+    e.preventDefault();
+    let bio = this.context.bio.trim();
+
+    const newBio = {
+      bio: bio
+    };
+    fetch(`${config.API_ENDPOINT}/users/1`, {
+      method: "PATCH",
+      headers: {
+        "content-type": "application/json"
+      },
+      body: JSON.stringify(newBio)
+    })
+      .then(res => {
+        if (!res.ok) return res.json().then(e => Promise.reject(e));
+        return res.json();
+      })
+      .then(data => {
+        this.context.editBio(data);
+      })
+      .then(data => {
+        this.props.history.push("/admin/art");
+        return data;
+      })
+
+      .catch(error => {
+        console.error({ error });
+      });
+  };
+
   render() {
     return (
       <>
@@ -16,35 +52,22 @@ export default class AdminBio extends Component {
         </div>
 
         <form
-        // onSubmit={e => {
-        //   this.handleSubmitMeal(e);
-        // }}
+          onSubmit={e => {
+            this.handleSubmitBio(e);
+          }}
         >
           <div id="bio-div" className="bio-container">
             <textarea
-              // type="text"
               className="bio-input"
               id="bio"
               name="bio"
-              // placeholder="Meal Name"
-              defaultValue="Art makes me happy, hopefully it makes you happy too! I am a Colorado
-          based artist specializing in depicting landscapes on found pieces of
-          sandstone and granite, as well as on traditional canvas. I do
-          commission work as well upon request. Happy adventures! -Grace"
-              // onChange={e => this.validateName(e.target.value)}
+              defaultValue={this.context.bio}
+              onChange={e => this.handleChangeBio(e.target.value)}
               required
             />
-            {/* <ValidationError
-              hasError={!this.state.nameValid}
-              message={this.state.validationMessages.name}
-            /> */}
           </div>
 
-          <button
-            type="submit"
-            className="submitBtn"
-            // disabled={!this.state.nameValid}
-          >
+          <button type="submit" className="submitBtn">
             Submit Changes
           </button>
         </form>

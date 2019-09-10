@@ -8,6 +8,7 @@ import Splash from "./Splash";
 import Bio from "./Bio";
 import AdminAuth from "./AdminAuth";
 import AdminArt from "./AdminArt";
+import AdminAdd from "./AdminAdd";
 import AdminEdit from "./AdminEdit";
 import AdminBio from "./AdminBio";
 import config from "./config";
@@ -18,16 +19,18 @@ export default class App extends Component {
 
     this.state = {
       art: [],
-      bio: ""
+      bio: "",
+      username: "",
+      userid: ""
     };
   }
-  //   {
-  //   headers: { authorization: `basic ${TokenService.getAuthToken()}` }
-  // }
-  componentDidMount() {
-    this.getAllArt();
-    this.getAllUsers();
-  }
+
+  handleSetUser = user => {
+    this.setState({
+      username: user.username,
+      userid: user.userid.toString()
+    });
+  };
 
   getAllArt = () => {
     fetch(`${config.API_ENDPOINT}/art`)
@@ -44,6 +47,7 @@ export default class App extends Component {
         console.error({ error });
       });
   };
+
   getAllUsers = () => {
     fetch(`${config.API_ENDPOINT}/users`)
       .then(res => {
@@ -59,11 +63,56 @@ export default class App extends Component {
         console.error({ error });
       });
   };
+
+  handleDeleteArt = artid => {
+    this.setState({
+      art: [...this.state.art.filter(e => e.artid !== artid)]
+    });
+  };
+
+  handleAddArt = art => {
+    this.setState({ art: [...this.state.art, art] });
+  };
+
+  handleEditArt = art => {
+    let oldIndex = this.handleFindArt(art.artid);
+    this.state.art.splice(oldIndex, 1, art);
+  };
+
+  handleFindArt = artid => {
+    let location;
+    const { art } = this.state;
+    art.forEach((item, index) => {
+      if (item.artid === artid) {
+        location = index;
+      }
+    });
+
+    return location;
+  };
+
+  handleEditBio = value => {
+    this.setState({ bio: value });
+  };
+
+  componentDidMount() {
+    this.getAllArt();
+    this.getAllUsers();
+  }
+
   render() {
     const value = {
       art: this.state.art,
-      bio: this.state.bio
+      bio: this.state.bio,
+      userid: this.state.userid,
+      username: this.state.username,
+      deleteArt: this.handleDeleteArt,
+      editArt: this.handleEditArt,
+      addArt: this.handleAddArt,
+      editBio: this.handleEditBio,
+      setUser: this.handleSetUser
     };
+
     return (
       <ApiContext.Provider value={value}>
         <Router>
@@ -73,6 +122,7 @@ export default class App extends Component {
             <Route exact path="/bio" component={Bio} />
             <Route exact path="/admin" component={AdminAuth} />
             <Route exact path="/admin/art" component={AdminArt} />
+            <Route exact path="/admin/add" component={AdminAdd} />
             <Route exact path="/admin/edit" component={AdminEdit} />
             <Route exact path="/admin/bio" component={AdminBio} />
           </main>

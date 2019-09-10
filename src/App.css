@@ -9,8 +9,7 @@ html {
   font-size: 10pt;
   line-height: 1.4;
   font-weight: 400;
-  font-family: "Roboto Mono", monospace;
-  -webkit-text-size-adjust: 100%;
+  font-family: "Fredericka the Great", cursive;
 }
 body {
   margin: 0;
@@ -31,14 +30,18 @@ ul {
   width: 90%;
 }
 
-button {
-  width: 60%;
-  max-width: 200px;
+.App button {
+  width: 100px;
   height: 15%;
-  border-radius: 15%;
-  margin: 25px auto 0;
+  max-height: 50px;
+  margin: 1% auto;
   font-size: 16px;
   display: block;
+  opacity: 1;
+}
+button.submitBtn {
+  --widthA: 50px;
+  margin-right: calc(52.63% - var(--widthA));
 }
 
 button:hover {
@@ -63,26 +66,42 @@ select {
   background-color: white;
   font-size: 1.5rem;
 }
-li > a {
-  font-size: 1.4rem;
-}
+
 a {
-  font-size: 1.2rem;
-  color: cornflowerblue;
+  color: black;
   text-decoration: none;
 }
 a:visited {
+  color: black;
+}
+.nav a {
+  font-size: 1.4rem;
+  color: cornflowerblue;
+  text-decoration: none;
+}
+.nav a:visited {
   color: cornflowerblue;
 }
-a:hover {
+.nav a:hover {
   color: navy;
 }
 h1 {
-  font-size: 1.8em;
+  font-size: 1.6em;
+  border-bottom: 1px solid black;
+  margin-bottom: 2%;
 }
 h1,
 h2 {
   display: inline;
+}
+div > h2 {
+  font-size: 1.3em;
+}
+h3 {
+  font-size: 1.2rem;
+}
+p {
+  font-size: 1.2rem;
 }
 
 nav {
@@ -113,15 +132,30 @@ nav {
 .mobile-hidden {
   display: none;
 }
-/* .art-div {
-  float: right;
+/* image.art-image {
+  opacity: 1;
 } */
+
 .art-image {
   max-height: 50vh;
-
   max-width: 90%;
   width: auto;
+  border: 3px solid #333333;
+  border-radius: 2% 6% 5% 4% / 1% 1% 2% 4%;
 }
+.art-image::before {
+  content: "";
+  border: 2px solid #353535;
+  display: block;
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate3d(-50%, -50%, 0) scale(1.015) rotate(0.5deg);
+  border-radius: 1% 1% 2% 4% / 2% 6% 5% 4%;
+}
+
 .bio-input {
   width: 80%;
   height: 100px;
@@ -131,15 +165,13 @@ nav {
 }
 .edit-art-form {
   text-align: left;
-  padding-left: 20%;
+  padding-left: 5%;
   width: 100%;
 }
 .edit-art-form > input {
   text-align: left;
   font-size: 1.5rem;
-  width: 80%;
-  margin-left: 5%;
-  margin-right: 20%;
+  width: 90%;
   display: block;
 }
 .dimLabel {
@@ -147,7 +179,7 @@ nav {
   display: block;
 }
 .edit-art-form > input.dimInput {
-  width: fit-content;
+  max-width: 150px;
   display: inline;
   margin-right: 0;
 }
@@ -162,7 +194,7 @@ nav {
 .edit-art-form > input.priceInput {
   display: inline;
   margin-left: 0;
-  width: fit-content;
+  max-width: 150px;
 }
 .matchFont {
   font-size: 1.2rem;
@@ -170,10 +202,6 @@ nav {
   text-decoration: underline;
 }
 
-button.cancel-btn {
-  max-width: 100px;
-  margin: 0 auto;
-}
 .sign-in-message {
   width: 60%;
 }
@@ -198,14 +226,15 @@ h1.title {
 
 .App {
   text-align: center;
-  width: 80vw;
+  width: 100%;
+  min-height: 100vh;
+  height: 100%;
   border: solid 1px black;
-  border-radius: 5%;
   margin: 0 auto;
   box-shadow: 0 7px 4px #777, 0 0 10px rgba(0, 0, 0, 0.5);
   padding: 30px 0 20px;
   background-color: #f5f5f5;
-  opacity: 0.9;
+  opacity: 0.7;
 }
 
 .App > * {
@@ -219,7 +248,6 @@ h1.title {
 
 .label-container {
   border: solid 1px #ccc;
-  border-radius: 15%;
   margin: 50px auto 8px;
   padding: 5px 8px;
   position: relative;
@@ -317,24 +345,87 @@ div.error {
 .label-container label {
   font-size: 12px;
 }
+#page-nav label {
+  display: inline-block;
+  color: #fff;
+  background: #000;
+  font-style: normal;
+  font-size: 2em;
+  padding: 10px;
+  text-decoration: none;
+}
+
+#page-nav ul li {
+  display: block;
+}
+
+#page-nav ul,
+#hamburger {
+  display: none;
+}
+#page-nav input:checked ~ ul {
+  display: block;
+}
+.main-header {
+  width: 90%;
+  margin: 2% auto;
+}
+#bio-section {
+  font-size: 1.3em;
+  padding: 10% 0;
+}
 
 @media screen and (min-width: 420px) {
   h1 {
     font-size: 2em;
   }
+  div > h2 {
+    font-size: 1.5em;
+  }
 }
 @media screen and (min-width: 720px) {
+  .edit-art-form {
+    padding-left: 20%;
+  }
+  .edit-art-form > input {
+    width: 70%;
+    margin-left: 5%;
+    margin-right: 20%;
+  }
   ul {
     width: 100%;
   }
-
-  button.submitBtn {
+  .App button {
+    min-width: 150px;
     display: inline;
-    margin: 1%;
+  }
+  button.cancel-btn {
+    margin-left: 2%;
+  }
+  button.cancel-btn-add,
+  button.cancel-btn-auth {
+    margin-left: 0;
+  }
+  button.submitBtn {
+    --widthB: 75px;
+    margin-right: calc(62.5% - var(--widthB));
+    display: block;
+  }
+
+  .main-header {
+    width: 70%;
   }
 }
 
 @media screen and (min-width: 810px) {
+  .App button {
+    min-width: 200px;
+  }
+
+  button.submitBtn {
+    --widthC: 100px;
+    margin-right: calc(62.5% - var(--widthC));
+  }
   .mobile {
     display: none;
   }
@@ -345,6 +436,26 @@ div.error {
   h1.title {
     width: 90%;
   }
+  #page-nav {
+    width: 100%;
+  }
+
+  #page-nav label,
+  #hamburger {
+    display: none;
+  }
+
+  #page-nav ul {
+    display: inline;
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+  }
+  #page-nav ul li {
+    display: inline-block;
+    padding: 10px;
+    box-sizing: border-box;
+  }
 }
 
 @media screen and (min-width: 1070px) {
@@ -354,5 +465,17 @@ div.error {
   }
   .navSpan {
     display: inline;
+  }
+  .art-div {
+    padding-top: 5%;
+    width: 25%;
+  }
+  .art-div-right {
+    float: right;
+    margin: 0 10%;
+  }
+  .art-div-left {
+    float: left;
+    margin: 0 10%;
   }
 }
