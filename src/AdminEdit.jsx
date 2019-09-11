@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import "./style.css";
 import Title from "./Title";
 import ApiContext from "./ApiContext";
 import AdminNav from "./AdminNav";
@@ -162,6 +163,30 @@ export default class AdminEdit extends Component {
     });
   }
 
+  uploadFile = (file, i) => {
+    var url = "https://api.imgur.com/3/upload";
+    var formData = new FormData();
+
+    formData.append("upload_preset", "ujpu6gyk");
+    formData.append("file", file);
+    let clientid = "0dce484c6ed452c";
+
+    fetch(`${url}`, {
+      method: "POST",
+      headers: {
+        Authorization: "Client-ID " + clientid,
+        "content-type": "formdata"
+      },
+      body: formData
+    })
+      .then(res => {
+        console.log(res);
+      })
+
+      .catch(error => {
+        console.error({ error });
+      });
+  };
   render() {
     let {
       artid,
@@ -173,6 +198,54 @@ export default class AdminEdit extends Component {
       title,
       price
     } = this.state;
+    let dropArea = document.getElementById("drop-area");
+
+    if (dropArea) {
+      ["dragenter", "dragover", "dragleave", "drop"].forEach(eventName => {
+        dropArea.addEventListener(eventName, this.preventDefaults, false);
+        document.body.addEventListener(eventName, this.preventDefaults, false);
+      });
+
+      // Highlight drop area when item is dragged over it
+      ["dragenter", "dragover"].forEach(eventName => {
+        dropArea.addEventListener(eventName, this.highlight, false);
+      });
+      ["dragleave", "drop"].forEach(eventName => {
+        dropArea.addEventListener(eventName, this.unhighlight, false);
+      });
+
+      // Handle dropped files
+      dropArea.addEventListener("drop", this.handleDrop, false);
+
+      // ************************ Drag and drop ***************** //
+
+      this.preventDefaults = e => {
+        console.log("default area found", e);
+
+        e.preventDefault();
+        e.stopPropagation();
+      };
+
+      this.highlight = e => {
+        console.log("highlighting");
+        dropArea.classList.add("highlight");
+      };
+
+      this.unhighlight = e => {
+        dropArea.classList.remove("highlight");
+      };
+
+      this.handleDrop = e => {
+        var dt = e.dataTransfer;
+        var files = dt.files;
+
+        this.handleFiles(files);
+      };
+
+      this.handleFiles = files => {
+        this.uploadFile(files);
+      };
+    }
     return (
       <>
         <AdminNav />
@@ -180,6 +253,27 @@ export default class AdminEdit extends Component {
         <div>
           <h2>Please edit your art here.</h2>
         </div>
+        <div id="drop-area">
+          <form className="my-form">
+            <p>
+              Upload image file with the button or by dragging and dropping
+              images onto the dashed region
+            </p>
+            <input
+              type="file"
+              id="fileElem"
+              multiple
+              accept="image/*"
+              onChange={this.handleFiles}
+            />
+            <label className="button" htmlFor="fileElem">
+              Select image file
+            </label>
+          </form>
+          <progress id="progress-bar" max="100" value="0" />
+          <div id="gallery"></div>
+        </div>
+        <br />
         <form
           className="edit-art-form"
           id="edit-form"
@@ -197,6 +291,7 @@ export default class AdminEdit extends Component {
             onChange={this.handleChangeImage}
           />
           <br />
+
           <label htmlFor="title">Title:</label>
           <input
             id="title"
