@@ -132,9 +132,9 @@ nav {
 .mobile-hidden {
   display: none;
 }
-/* image.art-image {
+section image.art-image {
   opacity: 1;
-} */
+}
 
 .art-image {
   max-height: 50vh;

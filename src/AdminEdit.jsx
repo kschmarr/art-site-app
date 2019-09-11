@@ -19,6 +19,7 @@ export default class AdminEdit extends Component {
       availability: "",
       price: "",
       image: "",
+      progress: "",
       nameValid: true,
       validationMessages: {
         name: ""
@@ -163,30 +164,42 @@ export default class AdminEdit extends Component {
     });
   }
 
-  uploadFile = (file, i) => {
-    var url = "https://api.imgur.com/3/upload";
-    var formData = new FormData();
+  uploadImage() {
+    const r = new XMLHttpRequest();
+    const d = new FormData();
+    const e = document.getElementsByClassName("input-image")[0].files[0];
+    const pb = document.getElementById("progress-bar");
 
-    formData.append("upload_preset", "ujpu6gyk");
-    formData.append("file", file);
-    let clientid = "0dce484c6ed452c";
+    function updateProgress(percent) {
+      if (percent < 100) {
+        pb.classList.remove("hidePB");
+      } else {
+        pb.classList.add("hidePB");
+      }
+      console.log(percent);
+      console.log(!!pb);
+      pb.value = percent;
+    }
+    d.append("image", e);
 
-    fetch(`${url}`, {
-      method: "POST",
-      headers: {
-        Authorization: "Client-ID " + clientid,
-        "content-type": "formdata"
-      },
-      body: formData
-    })
-      .then(res => {
-        console.log(res);
-      })
+    r.open("POST", "https://api.imgur.com/3/image/");
+    r.setRequestHeader(
+      "Authorization",
+      `Bearer 89aaafbafea43c0fb837f3d97cfd723c698eb632`
+    );
+    r.upload.addEventListener("progress", function(e) {
+      updateProgress((e.loaded * 100.0) / e.total);
+    });
+    r.onreadystatechange = function() {
+      if (r.status === 200 && r.readyState === 4) {
+        let res = JSON.parse(r.responseText);
+        document.getElementById("image").value = res.data.link;
+        console.log(res.data.link);
+      }
+    };
+    r.send(d);
+  }
 
-      .catch(error => {
-        console.error({ error });
-      });
-  };
   render() {
     let {
       artid,
@@ -196,56 +209,10 @@ export default class AdminEdit extends Component {
       width,
       availability,
       title,
-      price
+      price,
+      progress
     } = this.state;
-    let dropArea = document.getElementById("drop-area");
 
-    if (dropArea) {
-      ["dragenter", "dragover", "dragleave", "drop"].forEach(eventName => {
-        dropArea.addEventListener(eventName, this.preventDefaults, false);
-        document.body.addEventListener(eventName, this.preventDefaults, false);
-      });
-
-      // Highlight drop area when item is dragged over it
-      ["dragenter", "dragover"].forEach(eventName => {
-        dropArea.addEventListener(eventName, this.highlight, false);
-      });
-      ["dragleave", "drop"].forEach(eventName => {
-        dropArea.addEventListener(eventName, this.unhighlight, false);
-      });
-
-      // Handle dropped files
-      dropArea.addEventListener("drop", this.handleDrop, false);
-
-      // ************************ Drag and drop ***************** //
-
-      this.preventDefaults = e => {
-        console.log("default area found", e);
-
-        e.preventDefault();
-        e.stopPropagation();
-      };
-
-      this.highlight = e => {
-        console.log("highlighting");
-        dropArea.classList.add("highlight");
-      };
-
-      this.unhighlight = e => {
-        dropArea.classList.remove("highlight");
-      };
-
-      this.handleDrop = e => {
-        var dt = e.dataTransfer;
-        var files = dt.files;
-
-        this.handleFiles(files);
-      };
-
-      this.handleFiles = files => {
-        this.uploadFile(files);
-      };
-    }
     return (
       <>
         <AdminNav />
@@ -253,26 +220,7 @@ export default class AdminEdit extends Component {
         <div>
           <h2>Please edit your art here.</h2>
         </div>
-        <div id="drop-area">
-          <form className="my-form">
-            <p>
-              Upload image file with the button or by dragging and dropping
-              images onto the dashed region
-            </p>
-            <input
-              type="file"
-              id="fileElem"
-              multiple
-              accept="image/*"
-              onChange={this.handleFiles}
-            />
-            <label className="button" htmlFor="fileElem">
-              Select image file
-            </label>
-          </form>
-          <progress id="progress-bar" max="100" value="0" />
-          <div id="gallery"></div>
-        </div>
+
         <br />
         <form
           className="edit-art-form"
@@ -290,6 +238,20 @@ export default class AdminEdit extends Component {
             type="text"
             onChange={this.handleChangeImage}
           />
+          <input
+            type="file"
+            id="fileElem"
+            multiple
+            accept="image/*"
+            className="input-image"
+            onChange={this.uploadImage.bind(this)}
+          />
+          <progress
+            id="progress-bar"
+            className="hidePB"
+            max="100"
+            value="0"
+          ></progress>
           <br />
 
           <label htmlFor="title">Title:</label>
