@@ -17,6 +17,7 @@ export default class AdminAdd extends Component {
       availability: "available",
       price: "",
       image: "",
+      progress: "",
       nameValid: true,
       validationMessages: {
         name: ""
@@ -113,6 +114,42 @@ export default class AdminAdd extends Component {
   handleChangePrice = event => {
     this.setState({ price: event.target.value });
   };
+  uploadImage() {
+    const r = new XMLHttpRequest();
+    const d = new FormData();
+    const e = document.getElementsByClassName("input-image")[0].files[0];
+    const pb = document.getElementById("progress-bar");
+
+    function updateProgress(percent) {
+      if (percent < 100) {
+        pb.classList.remove("hidePB");
+      } else {
+        pb.classList.add("hidePB");
+      }
+      pb.value = percent;
+    }
+
+    d.append("image", e);
+    r.open("POST", "https://api.imgur.com/3/image/");
+    r.setRequestHeader(
+      "Authorization",
+      `Bearer 89aaafbafea43c0fb837f3d97cfd723c698eb632`
+    );
+    r.upload.addEventListener("progress", function(e) {
+      updateProgress((e.loaded * 100.0) / e.total);
+    });
+    r.onreadystatechange = () => {
+      if (r.status === 200 && r.readyState === 4) {
+        let res = JSON.parse(r.responseText);
+        // document.getElementById("image").value = res.data.link;
+        this.handleImage(res.data.link);
+      }
+    };
+    r.send(d);
+  }
+  handleImage = image => {
+    this.setState({ image });
+  };
 
   render() {
     let {
@@ -147,6 +184,20 @@ export default class AdminAdd extends Component {
             type="text"
             onChange={this.handleChangeImage}
           />
+          <input
+            type="file"
+            id="fileElem"
+            multiple
+            accept="image/*"
+            className="input-image"
+            onChange={this.uploadImage.bind(this)}
+          />
+          <progress
+            id="progress-bar"
+            className="hidePB"
+            max="100"
+            value="0"
+          ></progress>
           <br />
           <label htmlFor="title">Title:</label>
           <input
@@ -181,7 +232,7 @@ export default class AdminAdd extends Component {
             name="height"
             className="artinput dimInput"
             value={height}
-            type="text"
+            type="number"
             onChange={this.handleChangeHeight}
           />
           <span>inches</span>
@@ -194,7 +245,7 @@ export default class AdminAdd extends Component {
             name="width"
             className="artinput dimInput"
             value={width}
-            type="text"
+            type="number"
             onChange={this.handleChangeWidth}
           />
           <span>inches</span>
@@ -208,7 +259,7 @@ export default class AdminAdd extends Component {
             name="price"
             className="artinput priceInput"
             value={price}
-            type="text"
+            type="number"
             onChange={this.handleChangePrice}
           />
           <br />

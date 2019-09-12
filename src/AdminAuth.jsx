@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import ApiContext from "./ApiContext";
 import Title from "./Title";
+import Nav from "./Nav";
 import TokenService from "./token-service";
 import config from "./config";
 import { Link } from "react-router-dom";
@@ -51,6 +52,7 @@ export default class SignIn extends Component {
   render() {
     return (
       <>
+        <Nav />
         <Title />
         <div className="page-message">
           <h2 className="page-message">
@@ -72,6 +74,7 @@ export default class SignIn extends Component {
               onChange={e => {
                 this.setState({ name: e.target.value });
               }}
+              required
             />
           </div>
 
@@ -83,6 +86,7 @@ export default class SignIn extends Component {
               placeholder="Password"
               value={this.state.pass}
               onChange={e => this.setState({ pass: e.target.value })}
+              required
             />
           </div>
           <button type="submit">Sign-In</button>

@@ -211,8 +211,7 @@ export default class AdminEdit extends Component {
       width,
       availability,
       title,
-      price,
-      progress
+      price
     } = this.state;
 
     if (this.context.username) {
