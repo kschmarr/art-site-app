@@ -141,6 +141,9 @@ export default class AdminEdit extends Component {
   handleChangePrice = event => {
     this.setState({ price: event.target.value });
   };
+  handleImage = image => {
+    this.setState({ image });
+  };
 
   componentDidMount() {
     let {
@@ -179,6 +182,7 @@ export default class AdminEdit extends Component {
       }
       pb.value = percent;
     }
+
     d.append("image", e);
     r.open("POST", "https://api.imgur.com/3/image/");
     r.setRequestHeader(
@@ -188,10 +192,11 @@ export default class AdminEdit extends Component {
     r.upload.addEventListener("progress", function(e) {
       updateProgress((e.loaded * 100.0) / e.total);
     });
-    r.onreadystatechange = function() {
+    r.onreadystatechange = () => {
       if (r.status === 200 && r.readyState === 4) {
         let res = JSON.parse(r.responseText);
-        document.getElementById("image").value = res.data.link;
+        // document.getElementById("image").value = res.data.link;
+        this.handleImage(res.data.link);
       }
     };
     r.send(d);

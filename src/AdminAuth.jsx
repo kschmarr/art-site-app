@@ -23,7 +23,6 @@ export default class SignIn extends Component {
     const token = TokenService.makeBasicAuthToken(username, password);
     fetch(`${config.API_ENDPOINT}/users/${token}`, {})
       .then(res => {
-        console.log(res);
         if (!res.ok) return res.json().then(e => Promise.reject(e));
         return res.json();
       })
