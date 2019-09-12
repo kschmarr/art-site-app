@@ -176,12 +176,9 @@ export default class AdminEdit extends Component {
       } else {
         pb.classList.add("hidePB");
       }
-      console.log(percent);
-      console.log(!!pb);
       pb.value = percent;
     }
     d.append("image", e);
-
     r.open("POST", "https://api.imgur.com/3/image/");
     r.setRequestHeader(
       "Authorization",
@@ -194,7 +191,6 @@ export default class AdminEdit extends Component {
       if (r.status === 200 && r.readyState === 4) {
         let res = JSON.parse(r.responseText);
         document.getElementById("image").value = res.data.link;
-        console.log(res.data.link);
       }
     };
     r.send(d);
