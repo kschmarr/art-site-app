@@ -21,15 +21,13 @@ export default class SignIn extends Component {
     const username = this.state.name.toLowerCase();
     const password = this.state.pass;
     const token = TokenService.makeBasicAuthToken(username, password);
-    fetch(`${config.API_ENDPOINT}/users`, {
-      headers: { authorization: `basic ${token}` }
-    })
+    fetch(`${config.API_ENDPOINT}/users/${token}`, {})
       .then(res => {
+        console.log(res);
         if (!res.ok) return res.json().then(e => Promise.reject(e));
         return res.json();
       })
-      .then(users => {
-        let user = users.filter(user => user.token === token)[0];
+      .then(user => {
         if (!user) {
           alert(
             "We can't find your brush. No painting today!! (Bad credentials)"
@@ -72,7 +70,9 @@ export default class SignIn extends Component {
               id="username"
               placeholder="Username"
               value={this.state.name}
-              onChange={e => this.setState({ name: e.target.value })}
+              onChange={e => {
+                this.setState({ name: e.target.value });
+              }}
             />
           </div>
 

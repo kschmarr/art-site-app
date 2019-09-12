@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import ApiContext from "./ApiContext";
 import Title from "./Title";
 import AdminNav from "./AdminNav";
+import AdminBlock from "./AdminBlock";
 import config from "./config";
 
 export default class AdminBio extends Component {
@@ -43,35 +44,39 @@ export default class AdminBio extends Component {
   };
 
   render() {
-    return (
-      <>
-        <AdminNav />
-        <Title />
-        <div>
-          <h2>Please edit your bio here.</h2>
-        </div>
-
-        <form
-          onSubmit={e => {
-            this.handleSubmitBio(e);
-          }}
-        >
-          <div id="bio-div" className="bio-container">
-            <textarea
-              className="bio-input"
-              id="bio"
-              name="bio"
-              defaultValue={this.context.bio}
-              onChange={e => this.handleChangeBio(e.target.value)}
-              required
-            />
+    if (this.context.username) {
+      return (
+        <>
+          <AdminNav />
+          <Title />
+          <div>
+            <h2>Please edit your bio here.</h2>
           </div>
 
-          <button type="submit" className="submitBtn">
-            Submit Changes
-          </button>
-        </form>
-      </>
-    );
+          <form
+            onSubmit={e => {
+              this.handleSubmitBio(e);
+            }}
+          >
+            <div id="bio-div" className="bio-container">
+              <textarea
+                className="bio-input"
+                id="bio"
+                name="bio"
+                defaultValue={this.context.bio}
+                onChange={e => this.handleChangeBio(e.target.value)}
+                required
+              />
+            </div>
+
+            <button type="submit" className="submitBtn">
+              Submit Changes
+            </button>
+          </form>
+        </>
+      );
+    } else {
+      return <AdminBlock />;
+    }
   }
 }
