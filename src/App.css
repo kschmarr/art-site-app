@@ -39,6 +39,9 @@ button.submitBtn {
   --widthA: 50px;
   margin-right: calc(52.63% - var(--widthA));
 }
+button.purchase-button {
+  width: 200px;
+}
 
 button:hover {
   cursor: pointer;

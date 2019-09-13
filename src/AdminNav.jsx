@@ -1,13 +1,13 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
+import Hamburger from "./Hamburger";
 import TokenService from "./token-service";
 
 export default class Nav extends Component {
   render() {
     return (
       <nav className="nav" id="page-nav">
-        <label htmlFor="hamburger">&#9776;</label>
-        <input type="checkbox" id="hamburger" />
+        <Hamburger />
         <ul>
           <li>
             <Link to="/admin/art">See/Edit The Art.</Link>

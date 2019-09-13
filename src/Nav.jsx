@@ -1,12 +1,12 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
+import Hamburger from "./Hamburger";
 
 export default class Nav extends Component {
   render() {
     return (
       <nav className="nav" id="page-nav">
-        <label htmlFor="hamburger">&#9776;</label>
-        <input type="checkbox" id="hamburger" />
+        <Hamburger />
         <ul>
           <li>
             <Link to="/main">The Art.</Link>
