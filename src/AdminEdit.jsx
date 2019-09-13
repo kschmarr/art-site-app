@@ -342,8 +342,6 @@ export default class AdminEdit extends Component {
 
           <button
             type="delete"
-            id="bigDeleteBtn"
-            className=""
             onClick={() => {
               this.handleDeleteArt(artid);
             }}

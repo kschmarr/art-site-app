@@ -5,7 +5,7 @@ import Hamburger from "./Hamburger";
 export default class Nav extends Component {
   render() {
     return (
-      <nav className="nav" id="page-nav">
+      <nav className="page-nav">
         <Hamburger />
         <ul>
           <li>
