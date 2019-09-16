@@ -20,7 +20,11 @@ class Main extends Component {
         {this.context.art.map((art, i) => (
           <Card art={art} key={i} id={i} />
         ))}
-        <a href="mailto:kschmarr@gmail.com?subject=Purchase%20art&amp;body=I'm%20interested%20in%20purchasing%20the%20piece%20of%20art%20titled%20(fill%20in%20title%20of%20piece%20here).">
+        <a
+          target="_blank"
+          rel="noopener noreferrer"
+          href="mailto:kschmarr@gmail.com?subject=Purchase%20art&amp;body=I'm%20interested%20in%20purchasing%20the%20piece%20of%20art%20titled%20(fill%20in%20title%20of%20piece%20here)."
+        >
           <button className="purchase-button">Send Purchase Request</button>
         </a>
       </div>

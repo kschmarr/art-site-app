@@ -5,6 +5,7 @@ import AdminBlock from "./AdminBlock";
 import { Link } from "react-router-dom";
 import Card from "./Card";
 import ApiContext from "./ApiContext";
+import TokenService from "./token-service";
 
 class AdminArt extends Component {
   static contextType = ApiContext;
@@ -12,7 +13,7 @@ class AdminArt extends Component {
   render() {
     let { username, art } = this.context;
     let currentUser = username.charAt(0).toUpperCase() + username.substring(1);
-    if (this.context.username) {
+    if (TokenService.getAuthToken()) {
       return (
         <div className="main">
           <AdminNav />

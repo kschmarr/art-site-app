@@ -4,6 +4,8 @@ import Title from "./Title";
 import AdminNav from "./AdminNav";
 import AdminBlock from "./AdminBlock";
 import config from "./config";
+import TokenService from "./token-service";
+import CancelBtn from "./CancelBtn";
 
 export default class AdminBio extends Component {
   static contextType = ApiContext;
@@ -44,7 +46,7 @@ export default class AdminBio extends Component {
   };
 
   render() {
-    if (this.context.username) {
+    if (TokenService.getAuthToken()) {
       return (
         <>
           <AdminNav />
@@ -69,10 +71,11 @@ export default class AdminBio extends Component {
               />
             </div>
 
-            <button type="submit" className="submitBtn">
+            <button type="submit" className="">
               Submit Changes
             </button>
           </form>
+          <CancelBtn />
         </>
       );
     } else {

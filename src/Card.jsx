@@ -5,7 +5,7 @@ export default class Card extends Component {
     let divID = "div" + this.props.id;
 
     let showhide = () => {
-      document.getElementById(divID).classList.toggle("mobile-hidden");
+      document.getElementById(divID).classList.toggle("hidden");
     };
     document.getElementById(this.props.id).addEventListener("click", showhide);
     if (this.props.id % 2 === 0) {
@@ -30,7 +30,7 @@ export default class Card extends Component {
       <section id={this.props.id} className="card">
         <p>{title}</p>
         <img src={image} alt={title} className="art-image" />
-        <div id={"div" + this.props.id} className="mobile-hidden art-div">
+        <div id={"div" + this.props.id} className="hidden art-div">
           <h3>{title}</h3>
           <p className="description">{description}</p>
           <p>

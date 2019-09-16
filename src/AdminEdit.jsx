@@ -6,7 +6,8 @@ import AdminNav from "./AdminNav";
 import AdminBlock from "./AdminBlock";
 import ValidationError from "./ValidationError";
 import config from "./config";
-import { Link } from "react-router-dom";
+import CancelBtn from "./CancelBtn";
+import TokenService from "./token-service";
 
 export default class AdminEdit extends Component {
   constructor(props) {
@@ -94,6 +95,13 @@ export default class AdminEdit extends Component {
       .catch(error => {
         console.error({ error });
       });
+  };
+
+  handleDeleteConfirm = (title, artid) => {
+    let goAhead = window.confirm(`Are you sure you want to delete ${title}?`);
+    if (goAhead) {
+      this.handleDeleteArt(artid);
+    }
   };
 
   handleDeleteArt = artid => {
@@ -195,7 +203,6 @@ export default class AdminEdit extends Component {
     r.onreadystatechange = () => {
       if (r.status === 200 && r.readyState === 4) {
         let res = JSON.parse(r.responseText);
-        // document.getElementById("image").value = res.data.link;
         this.handleImage(res.data.link);
       }
     };
@@ -214,7 +221,7 @@ export default class AdminEdit extends Component {
       price
     } = this.state;
 
-    if (this.context.username) {
+    if (TokenService.getAuthToken()) {
       return (
         <>
           <AdminNav />
@@ -240,14 +247,24 @@ export default class AdminEdit extends Component {
               type="text"
               onChange={this.handleChangeImage}
             />
-            <input
-              type="file"
-              id="fileElem"
-              multiple
-              accept="image/*"
-              className="input-image"
-              onChange={this.uploadImage.bind(this)}
-            />
+            {this.state.image ? (
+              <button
+                onClick={() => {
+                  this.setState({ image: "" });
+                }}
+              >
+                Clear input
+              </button>
+            ) : (
+              <input
+                type="file"
+                id="fileElem"
+                multiple
+                accept="image/*"
+                className="input-image"
+                onChange={this.uploadImage.bind(this)}
+              />
+            )}
             <progress
               id="progress-bar"
               className="hidePB"
@@ -289,7 +306,8 @@ export default class AdminEdit extends Component {
               name="height"
               className="artinput dimInput"
               value={height}
-              type="text"
+              min="0"
+              type="number"
               onChange={this.handleChangeHeight}
             />
             <span>inches</span>
@@ -302,7 +320,8 @@ export default class AdminEdit extends Component {
               name="width"
               className="artinput dimInput"
               value={width}
-              type="text"
+              min="0"
+              type="number"
               onChange={this.handleChangeWidth}
             />
             <span>inches</span>
@@ -316,7 +335,8 @@ export default class AdminEdit extends Component {
               name="price"
               className="artinput priceInput"
               value={price}
-              type="text"
+              min="0"
+              type="number"
               onChange={this.handleChangePrice}
             />
             <br />
@@ -343,20 +363,12 @@ export default class AdminEdit extends Component {
           <button
             type="delete"
             onClick={() => {
-              this.handleDeleteArt(artid);
+              this.handleDeleteConfirm(title, artid);
             }}
           >
             Delete
           </button>
-          <Link
-            to={{
-              pathname: "/admin/art"
-            }}
-          >
-            <button type="button" className="cancel-btn">
-              Cancel
-            </button>
-          </Link>
+          <CancelBtn />
         </>
       );
     } else {

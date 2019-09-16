@@ -21,9 +21,7 @@ a {
 #drop-area.highlight {
   border-color: cornflowerblue;
 }
-/* p {
-  margin-top: 0;
-} */
+
 .my-form {
   margin-bottom: 10px;
 }
@@ -38,9 +36,6 @@ a {
 }
 .button:hover {
   background: #ddd;
-}
-input#fileElem.input-image {
-  margin: 0 0 0 5%;
 }
 progress {
   margin-left: 15%;

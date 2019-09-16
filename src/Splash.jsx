@@ -1,17 +1,19 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import Nav from "./Nav";
+import Title from "./Title";
 
 export default class Splash extends Component {
   render() {
     return (
       <>
         <Nav />
+        <Title />
         <section>
           <h2>What's the purpose of this wonderful app?</h2>
           <blockquote>
             The public site provides a platform for users to view pieces of
-            artwork and submit purchase requests for the art. The auth site
+            artwork and submit purchase requests for the art. The Admin site
             allows the artist to interface with the database (add, edit, and
             remove pieces of art from the site).
           </blockquote>

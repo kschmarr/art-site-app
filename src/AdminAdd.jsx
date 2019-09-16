@@ -4,7 +4,9 @@ import ApiContext from "./ApiContext";
 import AdminNav from "./AdminNav";
 import ValidationError from "./ValidationError";
 import config from "./config";
-import { Link } from "react-router-dom";
+import AdminBlock from "./AdminBlock";
+import CancelBtn from "./CancelBtn";
+import TokenService from "./token-service";
 
 export default class AdminAdd extends Component {
   constructor(props) {
@@ -141,7 +143,6 @@ export default class AdminAdd extends Component {
     r.onreadystatechange = () => {
       if (r.status === 200 && r.readyState === 4) {
         let res = JSON.parse(r.responseText);
-        // document.getElementById("image").value = res.data.link;
         this.handleImage(res.data.link);
       }
     };
@@ -161,138 +162,154 @@ export default class AdminAdd extends Component {
       title,
       price
     } = this.state;
-    return (
-      <>
-        <AdminNav />
-        <Title />
-        <div>
-          <h2>Please edit your art here.</h2>
-        </div>
-        <form
-          className="edit-art-form"
-          id="edit-form"
-          onSubmit={e => {
-            this.handleSubmitArt(e);
-          }}
-        >
-          <label htmlFor="image">Image Location:</label>
-          <input
-            id="image"
-            name="image"
-            className="artinput"
-            value={image}
-            type="text"
-            onChange={this.handleChangeImage}
-          />
-          <input
-            type="file"
-            id="fileElem"
-            multiple
-            accept="image/*"
-            className="input-image"
-            onChange={this.uploadImage.bind(this)}
-          />
-          <progress
-            id="progress-bar"
-            className="hidePB"
-            max="100"
-            value="0"
-          ></progress>
-          <br />
-          <label htmlFor="title">Title:</label>
-          <input
-            id="title"
-            name="title"
-            className="artinput"
-            value={title}
-            type="text"
-            onChange={e => this.validateName(e.target.value)}
-          />
-          <ValidationError
-            hasError={!this.state.nameValid}
-            message={this.state.validationMessages.name}
-          />
-          <br />
-          <label htmlFor="description">Description:</label>
-          <input
-            id="description"
-            name="description"
-            className="artinput"
-            value={description}
-            type="text"
-            onChange={this.handleChangeDescription}
-          />
-          <br />
-          <p className="matchFont">Dimensions:</p>
-          <label className="dimLabel" htmlFor="height">
-            Height:
-          </label>
-          <input
-            id="height"
-            name="height"
-            className="artinput dimInput"
-            value={height}
-            type="number"
-            onChange={this.handleChangeHeight}
-          />
-          <span>inches</span>
-          <br />
-          <label className="dimLabel" htmlFor="width">
-            Width:
-          </label>
-          <input
-            id="width"
-            name="width"
-            className="artinput dimInput"
-            value={width}
-            type="number"
-            onChange={this.handleChangeWidth}
-          />
-          <span>inches</span>
-          <br />
-          <label className="priceLabel" htmlFor="price">
-            Price:
-          </label>
-          <span className="priceSpan">$</span>
-          <input
-            id="price"
-            name="price"
-            className="artinput priceInput"
-            value={price}
-            type="number"
-            onChange={this.handleChangePrice}
-          />
-          <br />
-          <label htmlFor="availability">Availability:</label>
-          <select
-            id="availability"
-            name="availability"
-            value={availability}
-            onChange={this.handleChangeAvailability}
+    if (TokenService.getAuthToken()) {
+      return (
+        <>
+          <AdminNav />
+          <Title />
+          <div>
+            <h2>Please edit your art here.</h2>
+          </div>
+          <form
+            className="edit-art-form"
+            id="edit-form"
+            onSubmit={e => {
+              this.handleSubmitArt(e);
+            }}
           >
-            <option value="available">Available</option>
-            <option value="pending">Sale Pending</option>
-            <option value="sold">Sold</option>
-          </select>
-          <button
-            type="submit"
-            className="submitBtn"
-            disabled={!this.state.nameValid}
-          >
-            Submit
-          </button>
-        </form>
+            <label htmlFor="image">Image Location:</label>
+            <input
+              id="image"
+              name="image"
+              className="artinput"
+              value={image}
+              type="text"
+              onChange={this.handleChangeImage}
+              required
+            />
+            {this.state.image ? (
+              <button
+                onClick={() => {
+                  this.setState({ image: "" });
+                }}
+              >
+                Clear input
+              </button>
+            ) : (
+              <input
+                type="file"
+                id="fileElem"
+                multiple
+                accept="image/*"
+                className="input-image"
+                required
+                onChange={this.uploadImage.bind(this)}
+              />
+            )}
+            <progress
+              id="progress-bar"
+              className="hidePB"
+              max="100"
+              value="0"
+            ></progress>
+            <br />
+            <label htmlFor="title">Title:</label>
+            <input
+              id="title"
+              name="title"
+              className="artinput"
+              value={title}
+              type="text"
+              required
+              onChange={e => this.validateName(e.target.value)}
+            />
+            <ValidationError
+              hasError={!this.state.nameValid}
+              message={this.state.validationMessages.name}
+            />
+            <br />
+            <label htmlFor="description">Description:</label>
+            <input
+              id="description"
+              name="description"
+              className="artinput"
+              value={description}
+              type="text"
+              required
+              onChange={this.handleChangeDescription}
+            />
+            <br />
+            <p className="matchFont">Dimensions:</p>
+            <label className="dimLabel" htmlFor="height">
+              Height:
+            </label>
+            <input
+              id="height"
+              name="height"
+              className="artinput dimInput"
+              value={height}
+              type="number"
+              min="0"
+              required
+              onChange={this.handleChangeHeight}
+            />
+            <span>inches</span>
+            <br />
+            <label className="dimLabel" htmlFor="width">
+              Width:
+            </label>
+            <input
+              id="width"
+              name="width"
+              className="artinput dimInput"
+              value={width}
+              min="0"
+              type="number"
+              required
+              onChange={this.handleChangeWidth}
+            />
+            <span>inches</span>
+            <br />
+            <label className="priceLabel" htmlFor="price">
+              Price:
+            </label>
+            <span className="priceSpan">$</span>
+            <input
+              id="price"
+              name="price"
+              className="artinput priceInput"
+              value={price}
+              min="0"
+              type="number"
+              required
+              onChange={this.handleChangePrice}
+            />
+            <br />
+            <label htmlFor="availability">Availability:</label>
+            <select
+              id="availability"
+              name="availability"
+              value={availability}
+              onChange={this.handleChangeAvailability}
+            >
+              <option value="available">Available</option>
+              <option value="pending">Sale Pending</option>
+              <option value="sold">Sold</option>
+            </select>
+            <button
+              type="submit"
+              className="submitBtn"
+              disabled={!this.state.nameValid}
+            >
+              Submit
+            </button>
+          </form>
 
-        <Link
-          to={{
-            pathname: "/admin/art"
-          }}
-        >
-          <button type="button" className="cancel-btn-add">
-            Cancel
-          </button>
-        </Link>
-      </>
-    );
+          <CancelBtn />
+        </>
+      );
+    } else {
+      return <AdminBlock />;
+    }
   }
 }
